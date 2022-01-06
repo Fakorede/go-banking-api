@@ -69,24 +69,24 @@ func (db CustomerRepositoryDB) FindAll(status string) ([]Customer, *errs.AppErro
 	return customers, nil
 }
 
-func (db CustomerRepositoryDB) FindByID(id string) (Customer, *errs.AppError) {
+func (db CustomerRepositoryDB) FindByID(id string) (*Customer, *errs.AppError) {
 	findSql := "SELECT customer_id, name, city, zipcode, date_of_birth, status FROM customers WHERE customer_id = ?"
 
 	var c Customer
-	
+
 	//row := db.Client.QueryRow(findSql, id)
 	// err := row.Scan(&c.ID, &c.Name, &c.City, &c.Zipcode, &c.DateofBirth, &c.Status)
-	
+
 	err := db.Client.Get(&c, findSql, id)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return Customer{}, errs.NewNotFoundError("customer not found")
+			return nil, errs.NewNotFoundError("customer not found")
 		} else {
 			logger.Error("Error while scanning customer row: " + err.Error())
-			return Customer{}, errs.NewUnexpectedError("unexpected server error")
+			return nil, errs.NewUnexpectedError("unexpected server error")
 		}
 	}
 
-	return c, nil
+	return &c, nil
 }

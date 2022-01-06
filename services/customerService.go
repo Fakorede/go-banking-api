@@ -2,12 +2,13 @@ package services
 
 import (
 	"go-banking-api/domain"
+	"go-banking-api/dto"
 	"go-banking-api/errs"
 )
 
 type CustomerService interface {
-	GetAllCustomers(status string) ([]domain.Customer, *errs.AppError)
-	GetCustomer(id string) (domain.Customer, *errs.AppError)
+	GetAllCustomers(status string) ([]dto.CustomerResponse, *errs.AppError)
+	GetCustomer(id string) (*dto.CustomerResponse, *errs.AppError)
 }
 
 type DefaultCustomerService struct {
@@ -20,7 +21,7 @@ func NewDefaultCustomerService(repository domain.CustomerRepository) DefaultCust
 	}
 }
 
-func (s DefaultCustomerService) GetAllCustomers(status string) ([]domain.Customer, *errs.AppError) {
+func (s DefaultCustomerService) GetAllCustomers(status string) ([]dto.CustomerResponse, *errs.AppError) {
 	if status == "active" {
 		status = "1"
 	} else if status == "inactive" {
@@ -29,9 +30,27 @@ func (s DefaultCustomerService) GetAllCustomers(status string) ([]domain.Custome
 		status = ""
 	}
 
-	return s.repo.FindAll(status)
+	var customers []dto.CustomerResponse
+
+	c, err := s.repo.FindAll(status)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, v := range c {
+		customers = append(customers, v.ToDTO())
+	}
+
+	return customers, nil
 }
 
-func (s DefaultCustomerService) GetCustomer(id string) (domain.Customer, *errs.AppError) {
-	return s.repo.FindByID(id)
+func (s DefaultCustomerService) GetCustomer(id string) (*dto.CustomerResponse, *errs.AppError) {
+	c, err := s.repo.FindByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	response := c.ToDTO()
+
+	return &response, nil
 }
