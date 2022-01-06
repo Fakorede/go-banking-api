@@ -2,8 +2,10 @@ package domain
 
 import (
 	"database/sql"
+	"fmt"
 	"go-banking-api/errs"
 	"go-banking-api/logger"
+	"os"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -15,7 +17,15 @@ type CustomerRepositoryDB struct {
 }
 
 func NewCustomerRepositoryDB() CustomerRepositoryDB {
-	db, err := sqlx.Open("mysql", "root:password@tcp(localhost:3306)/go_banking_api")
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
+
+	dataSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPassword, dbHost, dbPort, dbName)
+
+	db, err := sqlx.Open("mysql", dataSource)
 	if err != nil {
 		panic(err)
 	}
