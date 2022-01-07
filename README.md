@@ -12,3 +12,9 @@
 - [sqlx](https://github.com/jmoiron/sqlx): General purpose extensions to golang's database/sql.
 - [gorilla mux](https://github.com/gorilla/mux): A powerful HTTP router and URL matcher for building Go web servers.
 - [zap](https://github.com/uber-go/zap): Blazing fast, structured, leveled logging in Go.
+
+## Run App
+
+```
+SERVER_ADDRESS=localhost SERVER_PORT=8000 DB_USER=root DB_PASSWORD=password DB_HOST=localhost DB_PORT=3306 DB_NAME=go_banking_api go run main.go
+```

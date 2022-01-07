@@ -7,37 +7,68 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/jmoiron/sqlx"
 )
 
 func checkVars() {
-	if 
-		os.Getenv("SERVER_ADDRESS") == "" || 
-		os.Getenv("SERVER_PORT") == "" || 
-		os.Getenv("DB_USER") == "" || 
-		os.Getenv("DB_PASSWORD") == "" || 
-		os.Getenv("DB_HOST") == "" || 
-		os.Getenv("DB_PORT") == "" || 
+	if os.Getenv("SERVER_ADDRESS") == "" ||
+		os.Getenv("SERVER_PORT") == "" ||
+		os.Getenv("DB_USER") == "" ||
+		os.Getenv("DB_PASSWORD") == "" ||
+		os.Getenv("DB_HOST") == "" ||
+		os.Getenv("DB_PORT") == "" ||
 		os.Getenv("DB_NAME") == "" {
 		log.Fatal("environment variables not defined!!!")
 	}
 }
 
+func getDBClient() *sqlx.DB {
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
+
+	dataSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPassword, dbHost, dbPort, dbName)
+
+	conn, err := sqlx.Open("mysql", dataSource)
+	if err != nil {
+		panic(err)
+	}
+
+	// See "Important settings" section.
+	conn.SetConnMaxLifetime(time.Minute * 3)
+	conn.SetMaxOpenConns(10)
+	conn.SetMaxIdleConns(10)
+
+	return conn
+}
+
 func Start() {
+	// env vars
 	checkVars()
 
-	// init/resolve app dependencies
-	customerHandlers := NewCustomerHandlers(services.NewDefaultCustomerService(domain.NewCustomerRepositoryDB()))
+	// DB connection
+	dbClient := getDBClient()
 
+	// init/resolve app dependencies
+	customerRepositoryDB := domain.NewCustomerRepositoryDB(dbClient)
+	accountRepositoryDB := domain.NewAccountRepositoryDB(dbClient)
+
+	customerHandlers := NewCustomerHandlers(services.NewDefaultCustomerService(customerRepositoryDB))
+	accountHandlers := NewAccountHandlers(services.NewDefaultAccountService(accountRepositoryDB))
+
+	// app router
 	router := mux.NewRouter()
 
 	router.HandleFunc("/", hello).Methods(http.MethodGet)
 
 	router.HandleFunc("/customers", customerHandlers.getAllCustomers).Methods(http.MethodGet)
 	router.HandleFunc("/customers/{customer_id:[0-9]+}", customerHandlers.getCustomer).Methods(http.MethodGet)
-
-	router.HandleFunc("/customers", createCustomer).Methods(http.MethodPost)
+	router.HandleFunc("/customers/{customer_id:[0-9]+}/account", accountHandlers.newAccount).Methods(http.MethodPost)
 
 	address := os.Getenv("SERVER_ADDRESS")
 	port := os.Getenv("SERVER_PORT")

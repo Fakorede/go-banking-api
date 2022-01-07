@@ -19,9 +19,9 @@ func NewCustomerHandlers(service services.CustomerService) CustomerHandlers {
 	}
 }
 
-func (ch CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
+func (h CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
 	param := r.URL.Query().Get("status")
-	customers, err := ch.service.GetAllCustomers(param)
+	customers, err := h.service.GetAllCustomers(param)
 	if err != nil {
 		writeResponse(w, r, err.Code, err.AsMessage())
 	} else {
@@ -29,11 +29,11 @@ func (ch CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Reques
 	}
 }
 
-func (ch CustomerHandlers) getCustomer(w http.ResponseWriter, r *http.Request) {
+func (h CustomerHandlers) getCustomer(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	customer_id := vars["customer_id"]
 
-	customer, err := ch.service.GetCustomer(customer_id)
+	customer, err := h.service.GetCustomer(customer_id)
 	if err != nil {
 		writeResponse(w, r, err.Code, err.AsMessage())
 	} else {

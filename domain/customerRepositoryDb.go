@@ -2,11 +2,8 @@ package domain
 
 import (
 	"database/sql"
-	"fmt"
 	"go-banking-api/errs"
 	"go-banking-api/logger"
-	"os"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -16,27 +13,9 @@ type CustomerRepositoryDB struct {
 	Client *sqlx.DB
 }
 
-func NewCustomerRepositoryDB() CustomerRepositoryDB {
-	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	dbName := os.Getenv("DB_NAME")
-
-	dataSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPassword, dbHost, dbPort, dbName)
-
-	db, err := sqlx.Open("mysql", dataSource)
-	if err != nil {
-		panic(err)
-	}
-
-	// See "Important settings" section.
-	db.SetConnMaxLifetime(time.Minute * 3)
-	db.SetMaxOpenConns(10)
-	db.SetMaxIdleConns(10)
-
+func NewCustomerRepositoryDB(dbClient *sqlx.DB) CustomerRepositoryDB {
 	return CustomerRepositoryDB{
-		Client: db,
+		Client: dbClient,
 	}
 }
 

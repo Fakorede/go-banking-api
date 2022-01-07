@@ -32,11 +32,11 @@ func (c Customer) statusAsText() string {
 
 func (c Customer) ToDTO() dto.CustomerResponse {
 	return dto.CustomerResponse{
-		ID: c.ID,
-		Name: c.Name,
-		City: c.City,
-		Zipcode: c.Zipcode,
+		ID:          c.ID,
+		Name:        c.Name,
+		City:        c.City,
+		Zipcode:     c.Zipcode,
 		DateofBirth: c.DateofBirth,
-		Status: c.statusAsText(),
+		Status:      c.statusAsText(),
 	}
 }
