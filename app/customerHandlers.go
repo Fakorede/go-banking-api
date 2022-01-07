@@ -42,10 +42,6 @@ func (h CustomerHandlers) getCustomer(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func createCustomer(w http.ResponseWriter, r *http.Request) {
-
-}
-
 func writeResponse(w http.ResponseWriter, r *http.Request, code int, data interface{}) {
 	if r.Header.Get("Content-Type") == "application/xml" {
 		w.Header().Add("Content-Type", "application/xml")
