@@ -1,4 +1,4 @@
-package app
+package handlers
 
 import (
 	"encoding/json"
@@ -19,7 +19,7 @@ func NewCustomerHandlers(service services.CustomerService) CustomerHandlers {
 	}
 }
 
-func (h CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
+func (h CustomerHandlers) GetAllCustomers(w http.ResponseWriter, r *http.Request) {
 	param := r.URL.Query().Get("status")
 	customers, err := h.service.GetAllCustomers(param)
 	if err != nil {
@@ -29,7 +29,7 @@ func (h CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (h CustomerHandlers) getCustomer(w http.ResponseWriter, r *http.Request) {
+func (h CustomerHandlers) GetCustomer(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	customer_id := vars["customer_id"]
 

@@ -1,4 +1,4 @@
-package app
+package handlers
 
 import (
 	"encoding/json"
@@ -19,7 +19,7 @@ func NewAccountHandlers(service services.AccountService) AccountHandlers {
 	}
 }
 
-func (h AccountHandlers) newAccount(w http.ResponseWriter, r *http.Request) {
+func (h AccountHandlers) NewAccount(w http.ResponseWriter, r *http.Request) {
 	customerId := mux.Vars(r)["customer_id"]
 
 	var request dto.NewAccountRequest
@@ -37,7 +37,7 @@ func (h AccountHandlers) newAccount(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h AccountHandlers) makeTransaction(w http.ResponseWriter, r *http.Request) {
+func (h AccountHandlers) MakeTransaction(w http.ResponseWriter, r *http.Request) {
 	customerId := mux.Vars(r)["customer_id"]
 	accountId := mux.Vars(r)["account_id"]
 

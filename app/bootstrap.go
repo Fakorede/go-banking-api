@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 	"go-banking-api/domain"
+	"go-banking-api/handlers"
 	"go-banking-api/services"
 	"log"
 	"net/http"
@@ -58,18 +59,18 @@ func Start() {
 	customerRepositoryDB := domain.NewCustomerRepositoryDB(dbClient)
 	accountRepositoryDB := domain.NewAccountRepositoryDB(dbClient)
 
-	customerHandlers := NewCustomerHandlers(services.NewDefaultCustomerService(customerRepositoryDB))
-	accountHandlers := NewAccountHandlers(services.NewDefaultAccountService(accountRepositoryDB))
+	customerHandlers := handlers.NewCustomerHandlers(services.NewDefaultCustomerService(customerRepositoryDB))
+	accountHandlers := handlers.NewAccountHandlers(services.NewDefaultAccountService(accountRepositoryDB))
 
 	// app router
 	router := mux.NewRouter()
 
 	router.HandleFunc("/", hello).Methods(http.MethodGet)
 
-	router.HandleFunc("/customers", customerHandlers.getAllCustomers).Methods(http.MethodGet)
-	router.HandleFunc("/customers/{customer_id:[0-9]+}", customerHandlers.getCustomer).Methods(http.MethodGet)
-	router.HandleFunc("/customers/{customer_id:[0-9]+}/account", accountHandlers.newAccount).Methods(http.MethodPost)
-	router.HandleFunc("/customers/{customer_id:[0-9]+}/account/{account_id:[0-9]+}", accountHandlers.makeTransaction).Methods(http.MethodPost)
+	router.HandleFunc("/customers", customerHandlers.GetAllCustomers).Methods(http.MethodGet)
+	router.HandleFunc("/customers/{customer_id:[0-9]+}", customerHandlers.GetCustomer).Methods(http.MethodGet)
+	router.HandleFunc("/customers/{customer_id:[0-9]+}/account", accountHandlers.NewAccount).Methods(http.MethodPost)
+	router.HandleFunc("/customers/{customer_id:[0-9]+}/account/{account_id:[0-9]+}", accountHandlers.MakeTransaction).Methods(http.MethodPost)
 
 	address := os.Getenv("SERVER_ADDRESS")
 	port := os.Getenv("SERVER_PORT")
