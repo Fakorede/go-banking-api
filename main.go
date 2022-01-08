@@ -1,8 +1,8 @@
 package main
 
 import (
-	"go-banking-api/app"
-	"go-banking-api/logger"
+	"github.com/Fakorede/go-banking-api/app"
+	"github.com/Fakorede/go-banking-api/logger"
 )
 
 func main() {

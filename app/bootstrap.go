@@ -2,9 +2,9 @@ package app
 
 import (
 	"fmt"
-	"go-banking-api/domain"
-	"go-banking-api/handlers"
-	"go-banking-api/services"
+	"github.com/Fakorede/go-banking-api/domain"
+	"github.com/Fakorede/go-banking-api/handlers"
+	"github.com/Fakorede/go-banking-api/services"
 	"log"
 	"net/http"
 	"os"

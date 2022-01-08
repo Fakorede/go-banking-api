@@ -1,8 +1,8 @@
 package domain
 
 import (
-	"go-banking-api/dto"
-	"go-banking-api/errs"
+	"github.com/Fakorede/go-banking-api/dto"
+	"github.com/Fakorede/go-banking-api/errs"
 )
 
 type AccountRepository interface {

@@ -1,7 +1,7 @@
 package app
 
 import (
-	"go-banking-api/handlers"
+	"github.com/Fakorede/go-banking-api/handlers"
 	"net/http"
 
 	"github.com/gorilla/mux"

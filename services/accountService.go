@@ -1,9 +1,9 @@
 package services
 
 import (
-	"go-banking-api/domain"
-	"go-banking-api/dto"
-	"go-banking-api/errs"
+	"github.com/Fakorede/go-banking-api/domain"
+	"github.com/Fakorede/go-banking-api/dto"
+	"github.com/Fakorede/go-banking-api/errs"
 
 	"time"
 )

@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"encoding/json"
-	"go-banking-api/dto"
-	"go-banking-api/services"
+	"github.com/Fakorede/go-banking-api/dto"
+	"github.com/Fakorede/go-banking-api/services"
 	"net/http"
 
 	"github.com/gorilla/mux"

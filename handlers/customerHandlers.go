@@ -3,7 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"encoding/xml"
-	"go-banking-api/services"
+	"github.com/Fakorede/go-banking-api/services"
 	"net/http"
 
 	"github.com/gorilla/mux"

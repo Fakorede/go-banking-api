@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"go-banking-api/errs"
+	"github.com/Fakorede/go-banking-api/errs"
 	"strings"
 )
 

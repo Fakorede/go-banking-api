@@ -1,4 +1,4 @@
-module go-banking-api
+module github.com/Fakorede/go-banking-api
 
 go 1.16
 

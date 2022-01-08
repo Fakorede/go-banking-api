@@ -1,8 +1,8 @@
 package domain
 
 import (
-	"go-banking-api/errs"
-	"go-banking-api/logger"
+	"github.com/Fakorede/go-banking-api/errs"
+	"github.com/Fakorede/go-banking-api/logger"
 	"strconv"
 
 	"github.com/jmoiron/sqlx"

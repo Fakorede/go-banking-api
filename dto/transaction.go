@@ -1,6 +1,6 @@
 package dto
 
-import "go-banking-api/errs"
+import "github.com/Fakorede/go-banking-api/errs"
 
 const WITHDRAWAL = "withdrawal"
 const DEPOSIT = "deposit"

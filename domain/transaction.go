@@ -1,6 +1,6 @@
 package domain
 
-import "go-banking-api/dto"
+import "github.com/Fakorede/go-banking-api/dto"
 
 const WITHDRAWAL = "withdrawal"
 
