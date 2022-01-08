@@ -2,26 +2,34 @@ package app
 
 import (
 	"fmt"
-	"github.com/Fakorede/go-banking-api/domain"
-	"github.com/Fakorede/go-banking-api/handlers"
-	"github.com/Fakorede/go-banking-api/services"
 	"log"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/Fakorede/go-banking-api/domain"
+	"github.com/Fakorede/go-banking-api/handlers"
+	"github.com/Fakorede/go-banking-api/logger"
+	"github.com/Fakorede/go-banking-api/services"
+
 	"github.com/jmoiron/sqlx"
 )
 
 func checkVars() {
-	if os.Getenv("SERVER_ADDRESS") == "" ||
-		os.Getenv("SERVER_PORT") == "" ||
-		os.Getenv("DB_USER") == "" ||
-		os.Getenv("DB_PASSWORD") == "" ||
-		os.Getenv("DB_HOST") == "" ||
-		os.Getenv("DB_PORT") == "" ||
-		os.Getenv("DB_NAME") == "" {
-		log.Fatal("environment variables not defined!!!")
+	envProps := []string{
+		"SERVER_ADDRESS",
+		"SERVER_PORT",
+		"DB_USER",
+		"DB_PASSWD",
+		"DB_ADDR",
+		"DB_PORT",
+		"DB_NAME",
+	}
+
+	for _, k := range envProps {
+		if os.Getenv(k) == "" {
+			logger.Error(fmt.Sprintf("Environment variable %s not defined. Terminating application...", k))
+		}
 	}
 }
 
