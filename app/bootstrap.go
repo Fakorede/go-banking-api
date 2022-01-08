@@ -10,7 +10,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -52,10 +51,10 @@ func Start() {
 	// env vars
 	checkVars()
 
-	// DB connection
+	// db connection
 	dbClient := getDBClient()
 
-	// init/resolve app dependencies
+	// app dependencies
 	customerRepositoryDB := domain.NewCustomerRepositoryDB(dbClient)
 	accountRepositoryDB := domain.NewAccountRepositoryDB(dbClient)
 
@@ -63,14 +62,7 @@ func Start() {
 	accountHandlers := handlers.NewAccountHandlers(services.NewDefaultAccountService(accountRepositoryDB))
 
 	// app router
-	router := mux.NewRouter()
-
-	router.HandleFunc("/", hello).Methods(http.MethodGet)
-
-	router.HandleFunc("/customers", customerHandlers.GetAllCustomers).Methods(http.MethodGet)
-	router.HandleFunc("/customers/{customer_id:[0-9]+}", customerHandlers.GetCustomer).Methods(http.MethodGet)
-	router.HandleFunc("/customers/{customer_id:[0-9]+}/account", accountHandlers.NewAccount).Methods(http.MethodPost)
-	router.HandleFunc("/customers/{customer_id:[0-9]+}/account/{account_id:[0-9]+}", accountHandlers.MakeTransaction).Methods(http.MethodPost)
+	router := routes(customerHandlers, accountHandlers)
 
 	address := os.Getenv("SERVER_ADDRESS")
 	port := os.Getenv("SERVER_PORT")
